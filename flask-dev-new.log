@@ -1,0 +1,218 @@
+C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\_python_version_support.py:273: FutureWarning: You are using a Python version (3.10.11) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+Warning: Firebase Storage CORS could not be updated automatically: 404 PATCH https://storage.googleapis.com/storage/v1/b/faceattend-89524.firebasestorage.app?projection=full&prettyPrint=false: The specified bucket does not exist.
+✓ Gmail notifications initialized with user: nyayatrack@gmail.com
+✓ Gmail password length: 16, preview: w***o
+ * Serving Flask app 'app'
+ * Debug mode: on
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+ * Restarting with stat
+C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\_python_version_support.py:273: FutureWarning: You are using a Python version (3.10.11) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+ * Debugger is active!
+ * Debugger PIN: 654-677-434
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:42] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\site-packages\google\cloud\firestore_v1\base_collection.py:317: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+127.0.0.1 - - [23/May/2026 19:21:43] "GET /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:43] "GET /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:44] "GET /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:45] "GET /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:45] "GET /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:49] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:50] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:59] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:21:59] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+ * Detected change in 'V:\\FaceAttend-backend\\firebase_config.py', reloading
+Warning: Firebase Storage CORS could not be updated automatically: 404 PATCH https://storage.googleapis.com/storage/v1/b/faceattend-89524.firebasestorage.app?projection=full&prettyPrint=false: The specified bucket does not exist.
+✓ Gmail notifications initialized with user: nyayatrack@gmail.com
+✓ Gmail password length: 16, preview: w***o
+ * Restarting with stat
+C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\_python_version_support.py:273: FutureWarning: You are using a Python version (3.10.11) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+ * Debugger is active!
+ * Debugger PIN: 654-677-434
+127.0.0.1 - - [23/May/2026 19:22:09] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:10] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:19] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:19] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:29] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:29] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:39] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:40] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:49] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:22:57] "POST /api/condonation/upload-document HTTP/1.1" 500 -
+127.0.0.1 - - [23/May/2026 19:23:07] "POST /api/condonation/request HTTP/1.1" 200 -
+C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\site-packages\google\cloud\firestore_v1\base_collection.py:317: UserWarning: Detected filter using positional arguments. Prefer using the 'filter' keyword argument instead.
+  return query.where(field_path, op_string, value)
+127.0.0.1 - - [23/May/2026 19:23:08] "GET /api/condonation/teacher/TESTSUB HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:42] "OPTIONS /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:42] "OPTIONS /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:42] "OPTIONS /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:42] "OPTIONS /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:42] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:42] "OPTIONS /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "OPTIONS /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "OPTIONS /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "OPTIONS /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "OPTIONS /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "GET /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "GET /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "GET /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:43] "GET /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:44] "GET /api/attendance/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:44] "GET /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:44] "GET /api/condonation/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:44] "GET /api/notifications/student-shortage/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:44] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:44] "GET /api/analytics/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:45] "GET /api/marks/student/CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:47] "GET /api/health HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:53] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:23:54] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:03] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:03] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:13] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:13] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:23] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:23] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:33] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:35] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:24:43] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:25:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:25:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:26:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:26:28] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:27:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:27:28] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:28:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:28:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:29:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:29:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:30:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:30:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:31:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:31:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:32:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:32:28] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:33:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:33:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:34:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:34:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:35:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:35:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:36:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:36:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:37] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:38] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:43] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:53] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:37:53] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:03] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:04] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:13] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:14] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:23] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:23] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:33] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:33] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:44] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:53] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:38:53] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:03] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:03] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:13] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:13] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:23] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:23] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:33] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:33] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:43] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:53] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:39:53] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:03] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:03] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:13] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:13] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:23] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:23] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:33] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:33] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:43] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:53] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:40:53] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:03] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:03] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:13] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:14] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:23] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:23] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:33] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:33] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:43] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:43] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:53] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:41:53] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:03] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:03] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:13] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:13] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:23] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:23] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:33] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:42:33] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:43:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:43:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:44:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:44:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:45:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:45:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:46:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:46:28] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:47:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:47:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:48:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:48:28] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:49:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:49:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:50:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:50:29] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:51:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:51:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:52:27] "OPTIONS /api/face/status?usn=CI143 HTTP/1.1" 200 -
+127.0.0.1 - - [23/May/2026 19:52:27] "GET /api/face/status?usn=CI143 HTTP/1.1" 200 -
+ * Detected change in 'V:\\FaceAttend-backend\\routes\\condonation.py', reloading
+Warning: Firebase Storage bucket does not exist: faceattend-89524.firebasestorage.app
+✓ Gmail notifications initialized with user: nyayatrack@gmail.com
+✓ Gmail password length: 16, preview: w***o

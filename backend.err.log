@@ -1,0 +1,20 @@
+utf-8 : The term 'utf-8' is not recognized as the name of a cmdlet, function, script file, or operable program. Check 
+the spelling of the name, or if a path was included, verify that the path is correct and try again.
+At line:1 char:23
++ $env:PYTHONIOENCODING=utf-8; python -u app.py
++                       ~~~~~
+    + CategoryInfo          : ObjectNotFound: (utf-8:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+ 
+C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\site-packages\google\api_core\_python_version_support.py:273: FutureWarning: You are using a Python version (3.10.11) which Google will stop supporting in new releases of google.api_core once it reaches its end of life (2026-10-04). Please upgrade to the latest Python version, or at least Python 3.11, to continue receiving updates for google.api_core past that date.
+  warnings.warn(message, FutureWarning)
+Traceback (most recent call last):
+  File "V:\FaceAttend-backend\app.py", line 20, in <module>
+    from routes.attendance    import attendance_bp
+  File "V:\FaceAttend-backend\routes\attendance.py", line 13, in <module>
+    from services.notifications import send_shortage_alert, subject_attendance_stats
+  File "V:\FaceAttend-backend\services\notifications.py", line 34, in <module>
+    print(f"\u2713 Gmail notifications initialized with user: {GMAIL_USER}")
+  File "C:\Users\vigne\AppData\Local\Programs\Python\Python310\lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2713' in position 0: character maps to <undefined>

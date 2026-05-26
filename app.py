@@ -1,3 +1,15 @@
+import subprocess
+import sys
+
+# Install face_recognition_models if missing
+try:
+    import face_recognition_models
+except ImportError:
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install",
+        "git+https://github.com/ageitgey/face_recognition_models"
+    ])
+
 """
 app.py
 ──────
@@ -32,7 +44,6 @@ from routes.condonation   import condonation_bp
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "faceattend_rit_secret_2026")
 
-# ── Gmail SMTP (Flask-Mail) ────────────────────────────────────────────────────
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
@@ -42,15 +53,12 @@ app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("GMAIL_USER", "")
 
 mail = Mail(app)
 
-# ── CORS ────────────────────────────────────────────────────────────────────────
-# Allow the Next.js frontend (localhost:3000) plus common deployment domains
 CORS(
     app,
     resources={r"/*": {"origins": "*"}},
     supports_credentials=True,
 )
 
-# ── Register blueprints ──────────────────────────────────────────────────────────
 app.register_blueprint(auth_bp,          url_prefix="/api/auth")
 app.register_blueprint(forgot_password_bp, url_prefix="/api/auth")
 app.register_blueprint(admin_bp,         url_prefix="/api/admin")

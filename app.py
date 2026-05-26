@@ -1,14 +1,23 @@
 import subprocess
 import sys
+import os
 
-# Install face_recognition_models if missing
+# Block startup until face_recognition_models is fully installed
 try:
     import face_recognition_models
 except ImportError:
-    subprocess.check_call([
-        sys.executable, "-m", "pip", "install",
-        "git+https://github.com/ageitgey/face_recognition_models"
-    ])
+    print("Installing face_recognition_models...", flush=True)
+    result = subprocess.run(
+        [sys.executable, "-m", "pip", "install", "--quiet",
+         "git+https://github.com/ageitgey/face_recognition_models"],
+        capture_output=True, text=True
+    )
+    print(result.stdout, flush=True)
+    print(result.stderr, flush=True)
+    if result.returncode != 0:
+        print("FATAL: Could not install face_recognition_models", flush=True)
+        sys.exit(1)
+    print("face_recognition_models installed successfully!", flush=True)
 
 """
 app.py
@@ -16,8 +25,6 @@ app.py
 Entry-point for the FaceAttend Flask backend.
 Database: Firebase Firestore  (via firebase-admin)
 """
-
-import os
 
 from dotenv import load_dotenv
 from flask import Flask, jsonify
@@ -44,6 +51,7 @@ from routes.condonation   import condonation_bp
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "faceattend_rit_secret_2026")
 
+# ── Gmail SMTP (Flask-Mail) ────────────────────────────────────────────────────
 app.config["MAIL_SERVER"] = "smtp.gmail.com"
 app.config["MAIL_PORT"] = 587
 app.config["MAIL_USE_TLS"] = True
@@ -53,12 +61,14 @@ app.config["MAIL_DEFAULT_SENDER"] = os.environ.get("GMAIL_USER", "")
 
 mail = Mail(app)
 
+# ── CORS ────────────────────────────────────────────────────────────────────────
 CORS(
     app,
     resources={r"/*": {"origins": "*"}},
     supports_credentials=True,
 )
 
+# ── Register blueprints ──────────────────────────────────────────────────────────
 app.register_blueprint(auth_bp,          url_prefix="/api/auth")
 app.register_blueprint(forgot_password_bp, url_prefix="/api/auth")
 app.register_blueprint(admin_bp,         url_prefix="/api/admin")

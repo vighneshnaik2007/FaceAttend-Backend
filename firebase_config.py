@@ -11,11 +11,14 @@ import os
 import firebase_admin
 from firebase_admin import credentials, firestore
 
-_SERVICE_ACCOUNT_PATH = os.path.join(os.path.dirname(__file__), "serviceAccountKey.json")
-
 def _init_firebase() -> firestore.client:
     if not firebase_admin._apps:
-        cred = credentials.Certificate(_SERVICE_ACCOUNT_PATH)
+        google_creds = os.environ.get("GOOGLE_CREDENTIALS")
+        if google_creds:
+            import json
+            cred = credentials.Certificate(json.loads(google_creds))
+        else:
+            cred = credentials.Certificate("serviceAccountKey.json")
         firebase_admin.initialize_app(cred)
     return firestore.client()
 

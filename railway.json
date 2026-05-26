@@ -1,1 +1,9 @@
-{"build":{"builder":"NIXPACKS"},"deploy":{"startCommand":"python app.py","restartPolicyType":"ON_FAILURE"}}
+{
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120",
+    "restartPolicyType": "ON_FAILURE"
+  }
+}

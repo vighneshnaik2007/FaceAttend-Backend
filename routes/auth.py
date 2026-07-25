@@ -11,6 +11,78 @@ from firebase_config import STUDENTS, TEACHERS, USERS, db
 auth_bp = Blueprint("auth", __name__)
 
 
+def _norm_semester(value) -> str:
+    text = str(value or "").strip()
+    if text.endswith(".0"):
+        text = text[:-2]
+    return text
+
+
+def _norm_section(value) -> str:
+    return str(value or "").strip().upper()
+
+
+def _teacher_assignments(t: dict) -> list[dict]:
+    assignments = t.get("assignments")
+    if isinstance(assignments, list) and assignments:
+        return [a for a in assignments if isinstance(a, dict)]
+    semester = _norm_semester(t.get("semester"))
+    section = _norm_section(t.get("section"))
+    if not semester and not section:
+        return []
+    return [{
+        "semester": semester,
+        "section": section,
+        "subject_code": t.get("subject_code", ""),
+        "subject_name": t.get("subject_name", ""),
+        "department": t.get("department", ""),
+    }]
+
+
+def _get_teacher_sections(teacher_id: str) -> list[dict]:
+    """Query a teacher document and return explicit section records.
+
+    Returns exactly:
+      [{"id": "SEM2_C", "section_name": "Section C", "semester": "Semester 2",
+        "subject": "ESC232 — Mechanical Engineering"}, ...]
+    """
+    doc = db.collection(TEACHERS).document(teacher_id).get()
+    if not doc.exists:
+        q = list(db.collection(TEACHERS).where("teacher_id", "==", teacher_id).limit(1).stream())
+        if not q:
+            return []
+        doc = q[0]
+    t = doc.to_dict() or {}
+    assignments = _teacher_assignments(t)
+    seen = set()
+    sections = []
+    for a in assignments:
+        sem = _norm_semester(a.get("semester"))
+        sec = _norm_section(a.get("section"))
+        code = (a.get("subject_code") or "").strip().upper()
+        name = (a.get("subject_name") or "").strip()
+        key = f"{sem}_{sec}_{code}"
+        if not sem or not sec or not code:
+            continue
+        if key in seen:
+            continue
+        seen.add(key)
+        sections.append({
+            "id": f"SEM{sem}_{sec}",
+            "section_name": f"Section {sec}",
+            "semester": f"Semester {sem}",
+            "subject": f"{code} — {name}" if name else code,
+        })
+    return sections
+
+
+@auth_bp.route("/teacher-sections/<teacher_id>", methods=["GET"])
+def teacher_sections(teacher_id):
+    """Dedicated endpoint returning only the teacher's section list."""
+    sections = _get_teacher_sections(teacher_id)
+    return jsonify(sections)
+
+
 @auth_bp.route("/login", methods=["POST"])
 def login():
     data = request.json or {}
@@ -64,6 +136,7 @@ def login():
         t = doc.to_dict()
         if t.get("password") != password:
             return jsonify({"success": False, "message": "Invalid email or password"}), 401
+        sections = _get_teacher_sections(doc.id)
         return jsonify({
             "success": True,
             "user": {
@@ -79,6 +152,7 @@ def login():
                     "name": t.get("subject_name"),
                 },
                 "subject_code": t.get("subject_code"),
+                "sections": sections,
             },
         })
 

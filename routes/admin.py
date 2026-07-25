@@ -409,13 +409,41 @@ def edit_teacher(teacher_id):
 
     if updates:
         next_doc = {**t_original, **updates}
-        updates["assignments"] = [{
-            "semester": _norm_semester(next_doc.get("semester")),
-            "section": _norm_section(next_doc.get("section")),
-            "subject_code": next_doc.get("subject_code", ""),
-            "subject_name": next_doc.get("subject_name", ""),
-            "department": next_doc.get("department", ""),
-        }]
+        new_sem = _norm_semester(next_doc.get("semester"))
+        new_sec = _norm_section(next_doc.get("section"))
+        new_code = (next_doc.get("subject_code") or "").strip().upper()
+        new_name = next_doc.get("subject_name", "")
+        new_dept = next_doc.get("department", "")
+
+        existing_assignments = _teacher_assignments(t_original)
+        if not existing_assignments:
+            existing_assignments = [{
+                "semester": new_sem,
+                "section": new_sec,
+                "subject_code": new_code,
+                "subject_name": new_name,
+                "department": new_dept,
+            }]
+        else:
+            found = False
+            for a in existing_assignments:
+                if (_norm_semester(a.get("semester")) == new_sem
+                        and _norm_section(a.get("section")) == new_sec
+                        and (a.get("subject_code") or "").strip().upper() == new_code):
+                    a["subject_name"] = new_name
+                    a["department"] = new_dept
+                    found = True
+                    break
+            if not found and (new_sem or new_sec or new_code):
+                existing_assignments.append({
+                    "semester": new_sem,
+                    "section": new_sec,
+                    "subject_code": new_code,
+                    "subject_name": new_name,
+                    "department": new_dept,
+                })
+
+        updates["assignments"] = existing_assignments
         ref.update(updates)
 
     t = ref.get().to_dict()

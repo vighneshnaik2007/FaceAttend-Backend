@@ -68,13 +68,26 @@ def _parse_encoding(raw) -> np.ndarray | None:
 
 
 def _parse_encoding_list(raw) -> list[np.ndarray]:
+    """Parse a stored `face_encodings` field back into a list of numpy arrays.
+
+    Supports both the new format (list of JSON-encoded strings) and the old
+    format (a single list-of-lists), for backward compatibility with any
+    records written before the nested-array fix.
+    """
     if not raw:
         return []
     try:
         if isinstance(raw, str):
             raw = json.loads(raw)
-        if isinstance(raw, list) and raw and isinstance(raw[0], list):
-            return [np.array(item) for item in raw]
+        if isinstance(raw, list):
+            out: list[np.ndarray] = []
+            for item in raw:
+                if isinstance(item, str):
+                    out.append(np.array(json.loads(item)))
+                elif isinstance(item, list):
+                    out.append(np.array(item))
+            if out:
+                return out
         enc = _parse_encoding(raw)
         return [enc] if enc is not None else []
     except (json.JSONDecodeError, TypeError, ValueError):
@@ -191,12 +204,16 @@ def register_face():
 
         now = datetime.utcnow().isoformat()
         display_name = student.get("name", usn)
-        serialized = [enc.tolist() for enc in encodings]
-        legacy_first = json.dumps(serialized[0])
+
+        # IMPORTANT: Firestore does not allow nested arrays (a list of lists)
+        # as a field value. Each 128-dim encoding must be JSON-encoded into a
+        # string before being placed inside the `face_encodings` array.
+        serialized_strings = [json.dumps(enc.tolist()) for enc in encodings]
+        legacy_first = serialized_strings[0]
 
         db.collection(STUDENTS).document(doc_id).update({
             "face_encoding": legacy_first,
-            "face_encodings": serialized,
+            "face_encodings": serialized_strings,
             "face_registered": True,
             "face_photo": thumbnails[0] if thumbnails else None,
             "face_registered_at": now,
@@ -206,7 +223,7 @@ def register_face():
             "student_id": doc_id,
             "name": display_name,
             "face_encoding": legacy_first,
-            "face_encodings": serialized,
+            "face_encodings": serialized_strings,
             "face_photos": thumbnails,
             "face_photo": thumbnails[0] if thumbnails else None,
             "registered_at": now,
@@ -217,7 +234,7 @@ def register_face():
             "message": f"Five-angle face registered for {display_name}",
             "usn": usn,
             "faceRegistered": True,
-            "encodings": len(serialized),
+            "encodings": len(serialized_strings),
         })
 
     if not image_data:

@@ -1,12 +1,15 @@
+"""
+routes/analytics.py  —  Firestore backend with section-aware filtering
+"""
 from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date, timedelta
 import math
 
-from flask import Blueprint, jsonify
+from flask import Blueprint, jsonify, request
 
-from firebase_config import ATTENDANCE, STUDENTS, SUBJECTS, db
+from firebase_config import ATTENDANCE, STUDENTS, SUBJECTS, TEACHERS, db
 
 analytics_bp = Blueprint("analytics", __name__)
 
@@ -35,32 +38,86 @@ def _parse_date(value: str | None) -> date | None:
         return None
 
 
+def _norm_semester(value) -> str:
+    text = str(value or "").strip()
+    if text.endswith(".0"):
+        text = text[:-2]
+    return text
+
+
+def _norm_section(value) -> str:
+    return str(value or "").strip().upper()
+
+
+def _teacher_assignments(t: dict) -> list[dict]:
+    assignments = t.get("assignments")
+    if isinstance(assignments, list) and assignments:
+        return [a for a in assignments if isinstance(a, dict)]
+    semester = _norm_semester(t.get("semester"))
+    section = _norm_section(t.get("section"))
+    if not semester and not section:
+        return []
+    return [{"semester": semester, "section": section,
+             "subject_code": t.get("subject_code", ""),
+             "subject_name": t.get("subject_name", ""),
+             "department": t.get("department", "")}]
+
+
+def _scope_for_subject(subject_code: str) -> tuple[str, str]:
+    """Return (semester, section) for a subject by checking SUBJECTS then TEACHERS."""
+    subj_doc = db.collection(SUBJECTS).document(subject_code).get()
+    subj = subj_doc.to_dict() if subj_doc.exists else {}
+    semester = _norm_semester(subj.get("semester"))
+    section = _norm_section(subj.get("section"))
+    if semester or section:
+        return semester, section
+
+    for doc in db.collection(TEACHERS).stream():
+        t = doc.to_dict() or {}
+        for a in _teacher_assignments(t):
+            if (a.get("subject_code") or "").strip().upper() == subject_code.strip().upper():
+                s = _norm_semester(a.get("semester"))
+                sec = _norm_section(a.get("section"))
+                if s or sec:
+                    return s, sec
+    return "", ""
+
+
+def _students_for_subject(subject_code: str, section_override: str = "") -> list:
+    """Return student docs filtered to the subject's semester+section."""
+    subj_semester, subj_section = _scope_for_subject(subject_code)
+
+    if section_override:
+        subj_section = _norm_section(section_override)
+
+    all_docs = list(db.collection(STUDENTS).order_by("usn").stream())
+    if not subj_semester and not subj_section:
+        return all_docs
+
+    filtered = []
+    for s in all_docs:
+        sd = s.to_dict()
+        if subj_semester and _norm_semester(sd.get("semester")) != subj_semester:
+            continue
+        if subj_section and _norm_section(sd.get("section")) != subj_section:
+            continue
+        filtered.append(s)
+    return filtered
+
+
 def attendance_prediction(attended: int, total_classes: int, subject_name: str = "this subject") -> dict:
     pct = round((attended / total_classes) * 100, 1) if total_classes else 0.0
     if total_classes <= 0:
-        return {
-            "current_pct": pct,
-            "status": "no_data",
-            "classes_needed": 0,
-            "message": f"No attendance records are available for {subject_name} yet.",
-        }
-
+        return {"current_pct": pct, "status": "no_data", "classes_needed": 0,
+                "message": f"No attendance records available for {subject_name} yet."}
     if pct < 75:
         classes_needed = max(0, math.ceil(((0.75 * total_classes) - attended) / 0.25))
-        return {
-            "current_pct": pct,
-            "status": "below_75",
-            "classes_needed": classes_needed,
-            "message": f"You need to attend the next {classes_needed} consecutive classes without absence to reach 75% in {subject_name}.",
-        }
-
+        return {"current_pct": pct, "status": "below_75", "classes_needed": classes_needed,
+                "message": f"Attend the next {classes_needed} consecutive classes to reach 75% in {subject_name}."}
     classes_can_miss = max(0, math.floor((attended - (0.75 * total_classes)) / 0.75))
-    return {
-        "current_pct": pct,
-        "status": "safe" if pct > 80 else "caution",
-        "classes_can_miss": classes_can_miss,
-        "message": f"You can miss up to {classes_can_miss} more classes in {subject_name} and still maintain 75%.",
-    }
+    return {"current_pct": pct, "status": "safe" if pct > 80 else "caution",
+            "classes_can_miss": classes_can_miss,
+            "message": f"You can miss up to {classes_can_miss} more classes in {subject_name} and still maintain 75%."}
 
 
 @analytics_bp.route("/prediction/<usn>/<subject_code>", methods=["GET"])
@@ -84,22 +141,35 @@ def prediction(usn, subject_code):
 @analytics_bp.route("/teacher/<subject_code>", methods=["GET"])
 def teacher_analytics(subject_code):
     subject_code = (subject_code or "").strip().upper()
+
+    # Accept optional section override from query param
+    section_override = request.args.get("section", "")
+
+    # Get students filtered to the correct section
+    student_docs = _students_for_subject(subject_code, section_override)
+
     students = []
-    student_names: dict[str, str] = {}
-    for doc in db.collection(STUDENTS).order_by("usn").stream():
+    student_usn_set: set[str] = set()
+    for doc in student_docs:
         data = doc.to_dict() or {}
         usn = (data.get("usn") or doc.id).upper()
         name = data.get("name") or usn
-        student_names[usn] = name
+        student_usn_set.add(usn)
         students.append({"usn": usn, "name": name, "present": 0, "total": 0})
 
     by_usn = {s["usn"]: s for s in students}
     weekly_counts = [{"week": label, "present": 0, "total": 0} for label, _, _ in _week_windows()]
 
+    # Only count attendance for students in this section
     for doc in db.collection(ATTENDANCE).where("subject_code", "==", subject_code).stream():
         data = doc.to_dict() or {}
         usn = (data.get("usn") or "").upper()
         status = data.get("status")
+
+        # Skip students not in this section
+        if usn not in student_usn_set:
+            continue
+
         if usn in by_usn:
             by_usn[usn]["total"] += 1
             if status == "present":
@@ -119,10 +189,8 @@ def teacher_analytics(subject_code):
         total = row["total"]
         pct = round((row["present"] / total) * 100, 1) if total else 0.0
         student_percentages.append({
-            "usn": row["usn"],
-            "name": row["name"],
-            "present": row["present"],
-            "total": total,
+            "usn": row["usn"], "name": row["name"],
+            "present": row["present"], "total": total,
             "percentage": pct,
         })
 
@@ -133,8 +201,7 @@ def teacher_analytics(subject_code):
 
     total_students = len(student_percentages)
     average = round(
-        sum(row["percentage"] for row in student_percentages) / total_students,
-        1,
+        sum(row["percentage"] for row in student_percentages) / total_students, 1
     ) if total_students else 0.0
     below_75 = sum(1 for row in student_percentages if row["percentage"] < 75)
     above_90 = sum(1 for row in student_percentages if row["percentage"] >= 90)
@@ -142,6 +209,7 @@ def teacher_analytics(subject_code):
     return jsonify({
         "subject_code": subject_code,
         "subject_name": _subject_names().get(subject_code, subject_code),
+        "section": section_override,
         "students": student_percentages,
         "weekly": weekly,
         "ratio": [
@@ -195,17 +263,12 @@ def student_analytics(usn):
         pct = round((present / total) * 100, 1) if total else 0.0
         needed = max(0, math.ceil(((0.75 * total) - present) / 0.25)) if pct < 75 else 0
         subject_rows.append({
-            "subjectCode": code,
-            "subjectName": subject_names.get(code, code),
-            "present": present,
-            "totalClasses": total,
-            "percentage": pct,
+            "subjectCode": code, "subjectName": subject_names.get(code, code),
+            "present": present, "totalClasses": total, "percentage": pct,
         })
         prediction_rows.append({
-            "subjectCode": code,
-            "subjectName": subject_names.get(code, code),
-            "needed": needed,
-            "percentage": pct,
+            "subjectCode": code, "subjectName": subject_names.get(code, code),
+            "needed": needed, "percentage": pct,
         })
 
     weekly = []
@@ -213,10 +276,8 @@ def student_analytics(usn):
         for row in rows:
             pct = round((row["present"] / row["total"]) * 100, 1) if row["total"] else 0.0
             weekly.append({
-                "subjectCode": code,
-                "subjectName": subject_names.get(code, code),
-                "week": row["week"],
-                "percentage": pct,
+                "subjectCode": code, "subjectName": subject_names.get(code, code),
+                "week": row["week"], "percentage": pct,
             })
 
     return jsonify({

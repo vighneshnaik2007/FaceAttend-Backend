@@ -9,7 +9,7 @@ from datetime import date, datetime, timedelta
 
 from flask import Blueprint, jsonify, request
 
-from firebase_config import ATTENDANCE, STUDENTS, SUBJECTS, NOTIFICATIONS, db
+from firebase_config import ATTENDANCE, STUDENTS, SUBJECTS, TEACHERS, NOTIFICATIONS, db
 from services.notifications import send_shortage_alert, subject_attendance_stats
 
 attendance_bp = Blueprint("attendance", __name__)
@@ -58,6 +58,90 @@ def _get_student_by_usn(usn: str):
 
 def _att_id(usn: str, subject_code: str, att_date: str) -> str:
     return f"{usn}_{subject_code}_{att_date}"
+
+
+def _norm_semester(value) -> str:
+    text = str(value or "").strip()
+    if text.endswith(".0"):
+        text = text[:-2]
+    return text
+
+
+def _norm_section(value) -> str:
+    return str(value or "").strip().upper()
+
+
+def _teacher_assignments(t: dict) -> list[dict]:
+    assignments = t.get("assignments")
+    if isinstance(assignments, list) and assignments:
+        return [a for a in assignments if isinstance(a, dict)]
+
+    semester = _norm_semester(t.get("semester"))
+    section = _norm_section(t.get("section"))
+    if not semester and not section:
+        return []
+    return [{
+        "semester": semester,
+        "section": section,
+        "subject_code": t.get("subject_code", ""),
+        "subject_name": t.get("subject_name", ""),
+        "department": t.get("department", ""),
+    }]
+
+
+def _subject_scope(subject_code: str) -> tuple[str, str]:
+    """Return (semester, section) for a subject code.
+
+    Looks up the SUBJECTS collection first; if that doc doesn't have
+    semester/section set (e.g. seeded data), falls back to scanning the
+    TEACHERS collection for an assignment matching this subject code.
+    """
+    subj_doc = db.collection(SUBJECTS).document(subject_code).get()
+    subj = subj_doc.to_dict() if subj_doc.exists else {}
+    semester = _norm_semester(subj.get("semester"))
+    section = _norm_section(subj.get("section"))
+    if semester or section:
+        return semester, section
+
+    for doc in db.collection(TEACHERS).stream():
+        t = doc.to_dict() or {}
+        for assignment in _teacher_assignments(t):
+            if (assignment.get("subject_code") or "").strip().upper() == subject_code.strip().upper():
+                semester = _norm_semester(assignment.get("semester"))
+                section = _norm_section(assignment.get("section"))
+                if semester or section:
+                    return semester, section
+
+    return "", ""
+
+
+def _students_for_subject(subject_code: str, section_override: str = ""):
+    """Return STUDENTS docs restricted to the subject's semester + section.
+
+    If no semester/section scope can be resolved (subject not found anywhere),
+    falls back to all students (keeps backward compatibility).
+
+    section_override allows a teacher to scope to a specific section when
+    they teach the same subject across multiple sections.
+    """
+    subj_semester, subj_section = _subject_scope(subject_code)
+
+    if section_override:
+        subj_section = _norm_section(section_override)
+
+    all_docs = list(db.collection(STUDENTS).order_by("usn").stream())
+    if not subj_semester and not subj_section:
+        return all_docs
+
+    filtered = []
+    for s in all_docs:
+        sd = s.to_dict()
+        if subj_semester and _norm_semester(sd.get("semester")) != subj_semester:
+            continue
+        if subj_section and _norm_section(sd.get("section")) != subj_section:
+            continue
+        filtered.append(s)
+    return filtered
 
 
 # ── Mark single ───────────────────────────────────────────────────────────────
@@ -132,12 +216,13 @@ def mark_bulk():
 @attendance_bp.route("/today/<subject_code>", methods=["GET"])
 def today_attendance(subject_code):
     today    = date.today().isoformat()
+    section_override = _norm_section(request.args.get("section", ""))
     att_docs = db.collection(ATTENDANCE).where("subject_code", "==", subject_code).where("date", "==", today).stream()
     records  = {d.to_dict()["usn"]: d.to_dict() for d in att_docs}
     present_usns = {u for u, d in records.items() if d["status"] == "present"}
 
     pct_by_usn = _subject_pct_map(subject_code)
-    all_students = list(db.collection(STUDENTS).order_by("usn").stream())
+    all_students = _students_for_subject(subject_code, section_override)
     result = []
     for s in all_students:
         sd  = s.to_dict()
@@ -152,6 +237,7 @@ def today_attendance(subject_code):
     return jsonify({
         "date": today,
         "subject_code": subject_code,
+        "section": section_override,
         "records": result,
         "present_count": len(present_usns),
         "absent_count": len(all_students) - len(present_usns),
@@ -216,6 +302,7 @@ def attendance_history(usn):
 # ── Defaulters ────────────────────────────────────────────────────────────────
 @attendance_bp.route("/defaulters/<subject_code>", methods=["GET"])
 def defaulters(subject_code):
+    section_override = _norm_section(request.args.get("section", ""))
     att_docs      = list(db.collection(ATTENDANCE).where("subject_code", "==", subject_code).stream())
     class_dates   = {d.to_dict()["date"] for d in att_docs}
     total_classes = len(class_dates) or 1
@@ -226,7 +313,7 @@ def defaulters(subject_code):
             present_map[d["usn"]] = present_map.get(d["usn"], 0) + 1
 
     result = []
-    for s in db.collection(STUDENTS).stream():
+    for s in _students_for_subject(subject_code, section_override):
         sd      = s.to_dict()
         usn     = sd["usn"]
         present = present_map.get(usn, 0)
